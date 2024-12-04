@@ -1,4 +1,4 @@
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, PaymentElement,ExpressCheckoutElement } from '@stripe/react-stripe-js';
 
 const CheckoutForm = () => {
     const stripe = useStripe();
@@ -30,6 +30,7 @@ const CheckoutForm = () => {
     return (
         <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                <ExpressCheckoutElement />
                 <PaymentElement />
                 <button style={{width: "100%"}} disabled={!stripe}>Submit</button>
             </div>
