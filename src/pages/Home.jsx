@@ -112,12 +112,15 @@ const Home = () => {
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
             <div>Make Payment</div>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", width: "400px" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", width: "400px" }}>
                 <button style={{width: "100%"}} onClick={makePayment} disabled={loading}>
                     Checkout
                 </button>
                 <button style={{width: "100%"}} onClick={() => { makePayment(true) }} disabled={loading}>
                     Pay
+                </button>
+                <button style={{width: "100%"}} onClick={() => { navigate('/split-payment') }} disabled={loading}>
+                    Split
                 </button>
             </div>
         </div>

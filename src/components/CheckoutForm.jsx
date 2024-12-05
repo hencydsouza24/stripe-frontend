@@ -1,4 +1,4 @@
-import { useStripe, useElements, PaymentElement,ExpressCheckoutElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, PaymentElement, ExpressCheckoutElement } from '@stripe/react-stripe-js';
 
 const CheckoutForm = () => {
     const stripe = useStripe();
@@ -20,19 +20,38 @@ const CheckoutForm = () => {
 
         if (result.error) {
             console.error(result.error.message);
-        } else {
-            // Your customer will be redirected to your `return_url`. For some payment
-            // methods like iDEAL, your customer will be redirected to an intermediate
-            // site first to authorize the payment, then redirected to the `return_url`.
         }
+    };
+
+    const onConfirm = async () => {
+        if (!stripe) {
+            return;
+        }
+
+        const { error: submitError } = await elements.submit();
+        if (submitError) {
+            console.log(submitError.message)
+            return;
+        }
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: `${import.meta.env.VITE_FRONTEND_URL}/success`,
+            },
+        });
+
+        if (error) {
+            console.log(error.message)
+        } 
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                <ExpressCheckoutElement />
+                <ExpressCheckoutElement onConfirm={onConfirm} />
                 <PaymentElement />
-                <button style={{width: "100%"}} disabled={!stripe}>Submit</button>
+                <button style={{ width: "100%" }} disabled={!stripe}>Submit</button>
             </div>
         </form>
     )
